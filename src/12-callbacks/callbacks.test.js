@@ -1,4 +1,4 @@
-import { simpleCallback, simplePromise } from './callbacks';
+import { simpleCallback, fakeCallApi } from './callbacks';
 
 test('simple callback', () => {
     const result = simpleCallback(value => `Callback with value: ${value} was called`);
@@ -42,8 +42,34 @@ test('callback hell', () => {
  *  - Não precisa colocar a asserção dos testes, apenas simular o comportamento de uma requisição normal.
  *  - Você deve chamar a sua função dentro do bloco de testes abaixo 'http mock with callbacks'
  */
-test('http mock with callbacks', () => {
-    
+test('http mock with callbacks success', () => {
+    const url = '/jstraining/api/#onomedasuaapi';
+    const onSuccess = resultado => {
+        console.log(`Sucesso: ${JSON.stringify(resultado)}`)
+        expect(resultado).toEqual({status: 200, data: {success: true}})
+    };
+
+    const onError = error => {
+        console.log(`Erro: ${error}`)
+    };
+
+    fakeCallApi(url, onSuccess, onError);
+});
+
+test('http mock with callbacks error', () => {
+
+    const url = '/api/teste';
+
+    const onSuccess = resultado => {
+        console.log(`Sucesso: ${resultado}`)
+    };
+
+    const onError = error => {
+        console.log(`Erro: ${error}`);
+        expect(error).toEqual(`Invalid url ${url}`)
+    }
+
+    fakeCallApi(url, onSuccess, onError);
 });
 
 /**
@@ -53,5 +79,19 @@ test('http mock with callbacks', () => {
  *
  */
 test('http mock with callbacks chaining', () => {
+    const url = '/jstraining/api/#onomedasuaapi';
+    const urlError = '/api/error';
+    const onSuccess = resultado => {
+        console.log(`Sucesso: ${JSON.stringify(resultado)}`);
+        expect(resultado).toEqual({status: 200, data: {success: true}});
+        fakeCallApi(urlError, onSuccess, onError);
+    };
+
+    const onError = error => {
+        console.log(`Erro: ${error}`)
+        expect(error).toEqual(`Invalid url ${urlError}`)
+    };
+
+    fakeCallApi(url, onSuccess, onError);
 
 });

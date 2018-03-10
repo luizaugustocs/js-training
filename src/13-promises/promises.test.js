@@ -1,4 +1,4 @@
-import { promiseDef, simplePromise } from './promises';
+import { promiseDef, simplePromise, fakePromiseAPI } from './promises';
 
 test('promises def', () => {
 
@@ -21,30 +21,68 @@ test('promises def', () => {
  * Fazer junto
  */
 test('simple promise chaining', (done) => {
-    done();
+
+    simplePromise(true)
+        .then((value) => console.log(value))
+        .then(() => done());
 });
 
 /**
  * Fazer junto
  */
 test('simple promise error catching chaining', (done) => {
-    done();
+
+    simplePromise()
+        .then((value => console.log(value)))
+        .catch(error => console.log(error))
+        .then(() => done());
 });
 
 /**
  * Exercício 3
- * 
+ *
  * Refatorar o exercício dos callbacks (#2) para utilizar Promises conforme exemplo mostrado anteriormente
  */
 test('refactoring callback exercise', () => {
 
+    const url = '/jstraining/api/#onomedasuaapi';
+    const urlError = '/api/error';
+
+    const onSuccess = (data)=> {
+        console.log(`Sucesso: ${JSON.stringify(data)}`);
+        expect(data).toEqual({status: 200, data: {success: true}});
+    };
+
+    const onError = (error) => {
+        console.log(`Error: ${error}`)
+        expect(error).toEqual(`Invalid url ${urlError}`);
+    };
+
+    fakePromiseAPI(url)
+        .then(onSuccess)
+        .then(() => fakePromiseAPI(urlError))
+        .catch(onError);
 });
 
 /**
  * Exercício 4
- * 
+ *
  * Refatorar o exercício do encadeamento dos callbacks para utilizar o encadeamento das promises.
  */
-test('refactoring callback chaining promises', () => {
+test('refactoring callback chaining promises', (done) => {
+
+    simplePromise({a: 1})
+        .then((firstValue) => {
+            console.log(`FirstValue: ${JSON.stringify(firstValue)}`);
+            return {... firstValue, b: 2}
+        })
+        .then((secondValue) => {
+            console.log(`SecondValue: ${JSON.stringify(secondValue)}`);
+            return {... secondValue, c:3}
+        })
+        .then((thirdValue) => {
+            console.log(`ThirdValue: ${JSON.stringify(thirdValue)}`)
+        })
+        .then(()=> done())
 
 });

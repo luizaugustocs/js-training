@@ -19,3 +19,13 @@ export const simpleCallback = (callback = () => 'Empty callback') => {
 
     return callback('My first callback');
 };
+
+
+export const fakeCallApi = (url, success, error) => {
+
+    if (url === '/jstraining/api/#onomedasuaapi') {
+        success({status: 200, data: {success: true}})
+    } else {
+        error(`Invalid url ${url}`);
+    }
+};

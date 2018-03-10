@@ -27,3 +27,14 @@ export const simplePromise = (value) => new Promise((resolve, reject) => {
         reject('Invalid value');
     }
 });
+
+export const fakePromiseAPI = (url) => {
+    return new Promise((resolve, reject) => {
+        if (url === '/jstraining/api/#onomedasuaapi') {
+            resolve({status: 200, data: {success: true}})
+        } else {
+            reject(`Invalid url ${url}`)
+        }
+
+    })
+}

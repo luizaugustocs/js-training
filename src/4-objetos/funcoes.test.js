@@ -80,3 +80,20 @@ test(' Function assignment ', () => {
     const functionReference = oldStyleExpressionFunction;
     expect(functionReference()).toEqual('Expression assignment old style');
 });
+
+test('Equals single line', () => {
+
+    const obj1 ={
+        id: 1,
+        name: 'Teste',
+        obs: 'Observacao do teste'
+    };
+
+    const obj2 = {
+        id: 2,
+        name: 'Dois'
+    };
+
+    expect(equalsClosure('name')(obj1, obj2)).toBeFalsy()
+
+})
